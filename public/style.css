@@ -1,0 +1,30 @@
+html, body {
+  margin: 20px;
+  padding: 0;
+  background-color: #000;
+}
+
+
+#nickInput {
+	font-size: 20px;
+	width: 100px;
+	maxlength: 8;
+}
+
+#textInput {
+	font-size: 20px;
+	width: 300px;
+}
+
+
+.main{
+	text-align: center;
+	background-color: #333;
+	color: #FFF;
+	padding: 30px;
+	font-size: 20px;
+}
+
+#textbox {
+	resize: none;
+}
