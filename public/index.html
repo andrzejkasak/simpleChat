@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="style.css">
-
+	<script src="sketch.js"></script>
+	<script src="socket.io/socket.io.js"></script>
   </head>
   <body>
+  <div id='title'>SIMPLE MESSAGER</div>
+  <div id='online'>
+  </div>
   <div class='main'>
-    <script src="sketch.js"></script>
-	<script src="socket.io/socket.io.js"></script>
-	
-    Nick <input id='nickInput' />
-	<input id='textInput' />
+
+    <input id='nickInput' maxlength=10 placeholder='Username'/>
+	<input id='textInput' maxlength=500  placeholder='Type something...'/>
 	</br></br>
 	
-	<textarea id='textbox' font-size=20 rows=35 cols=80 readonly= 'readonly'></textarea>
+	<div id='textbox'></div>
 	</div>
+	
+	<footer id='foot'></footer>
   </body>
 </html>
