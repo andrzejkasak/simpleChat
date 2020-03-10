@@ -1,6 +1,6 @@
 let express = require('express'); //załączanie express do serwera
 let app = express(); //wywołanie fukcji tworzącej apliakcję
-let server = app.listen(process.env.PORT); //nasłuchiwanie na portie o nr 3000
+let server = app.listen(3000); //nasłuchiwanie na portie o nr 3000
 app.use(express.static('public')); //hostowanie plików w folderze "public"
 
 console.log("Server is running!");
@@ -11,23 +11,30 @@ io.sockets.on('connection', newConnection); //połączenie event
 
 let ids = [];
 let data = [];
-
+let nb = 50;
 
 function newConnection(socket){
 	console.log('New connection:' + socket.id);
 	ids[ids.length] = socket.id;
 	console.log('Online: ' + ids.length);
+	io.sockets.emit('id', ids.length);
 
 	socket.on('dataSave', saveData);
 	function saveData(d) {
-		data[data.length] = d;
+		data.unshift(d);
 		console.log('saving message');
 	}
 
-	socket.on('dataSend', sendData);
-	function sendData() {
-		io.sockets.emit('dataSend', data);
-		console.log('sending messages');
+	socket.on('dataSend1', sendData1);
+	function sendData1() {
+		socket.broadcast.emit('dataSend1', data.slice(0, nb));
+		console.log('sending messages1');
+	}
+	
+	socket.on('dataSend2', sendData2);
+	function sendData2() {
+		socket.emit('dataSend2', data.slice(0, nb));
+		console.log('sending messages2');
 	}
 	
 	socket.on('disconnect', disconnection);
@@ -40,5 +47,6 @@ function newConnection(socket){
 			}
 		}
 		console.log('Online: ' + ids.length);
+		io.sockets.emit('id', ids.length);
 	}
 }
