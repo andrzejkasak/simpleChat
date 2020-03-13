@@ -36,7 +36,7 @@ function newConnection(socket){
 			let message = {
 				user: d[0],
 				text: d[1],
-				date: dateFormat(now, "dd/mm/yyyy hh:MM:ss"),
+				date: dateFormat(now, "dd/mm/yyyy HH:MM:ss"),
 				index: 0
 			}
 			if(i != null) message.index = i+1;
