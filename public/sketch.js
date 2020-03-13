@@ -15,6 +15,7 @@ window.onload = function() {
   document.getElementById("foot").innerHTML = 'Andrzej Kasak - Copyright © 2020-'+(new Date().getFullYear()).toString();
 
   inpNick = document.getElementById("nickInput");
+  inpNick.addEventListener("keyup", keyListener2);
   inpText = document.getElementById("textInput");
   inpText.addEventListener("keyup", keyListener);
   boxText = document.getElementById("textbox");
@@ -43,7 +44,9 @@ function receiveData2(d){
 	
 	for(let i=0; i<d.length; i++){
 		let s = document.createElement('div');
-		s.innerHTML = "<div id='box'><div id='nick'>"+d[i][0] +"</div> <div id='date'>"+ d[i][2] + "</div><div id='text'>"+d[i][1] +"</div></div>";
+		s.innerHTML = "<div id='box'><div id='userbar'><span id='nick'>"+d[i].user+
+		"</span>"+d[i].date.toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'})+
+		"</div><div id='text'>"+d[i].text+"</div></div>";
 		boxText.appendChild(s);
 	}
 }
@@ -58,14 +61,6 @@ function keyListener(event) {
 	
 	if (event.key === "Enter") {
 		
-		
-		let check = false;
-		for(let i=0; i < inpNick.value.length; i++ ){
-			if(inpNick.value[i] == ' '){
-				check = true;
-				break;
-			}
-		}
 		let check2 = false;
 		for(let i = inpText.value.length-1; i >= 0; i--){
 			if(inpText.value[i] != ' ' && inpText.value[i] != '\n'){
@@ -74,12 +69,7 @@ function keyListener(event) {
 			}
 		}
 		
-		//console.log('->'+ inpText.value +'<-', new Date());
-		let err = document.getElementById('red');
-		err.innerHTML = "";
-	  if(inpNick.value == '' || check){
-		err.innerHTML = "Enter correct nickname!";
-	  }else if(inpText.value != '\n' && check2){
+		if(inpText.value != '\n' && check2){
 		  var user = getCookie("username");
 		  if (user != inpNick.value || user == ''){
 			user = inpNick.value;
@@ -91,13 +81,30 @@ function keyListener(event) {
 		  socket.emit('dataSave', d);
 		  socket.emit('dataSend1');
 		  socket.emit('dataSend2');
+		  
+		  let err = document.getElementById('err');
+		  err.innerHTML = "";
 	  }
 		inpText.value = '';
-	
 	}
 }
 
-
+function keyListener2(event) {
+	let check = false;
+		for(let i=0; i < inpNick.value.length; i++ ){
+			if(inpNick.value[i] == ' '){
+				check = true;
+				break;
+			}
+		}
+		
+		let err = document.getElementById('err');
+	  if(inpNick.value == '' || check){
+		  err.innerHTML = "<span style='color:red;'>Enter correct username!</span>";
+	  }else{
+		  err.innerHTML = "<span style='color:lime;'>Username is correct!</span>";
+	  }
+}
 
 
 
