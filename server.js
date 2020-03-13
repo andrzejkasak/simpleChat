@@ -33,7 +33,6 @@ function newConnection(socket){
 		let i;
 		database.find({}).sort({index:1}).exec(function(err, messages) {
 			if(messages.length > 0) i = messages[messages.length-1].index;
-			//console.log('to ->>', messages, i, messages.length);
 			let now = new Date();
 			now.setTime(now.getTime()+3600000);
 			let message = {
@@ -102,8 +101,8 @@ function serverStart(){
 	let i;
 		database.find({}).sort({index:1}).exec(function(err, messages) {
 			if(messages.length > 0) i = messages[messages.length-1].index;
-			//console.log('to ->>', messages, i, messages.length);
 			let now = new Date();
+			now.setTime(now.getTime()+3600000);
 			let message = {
 				user: 'server started:',
 				text: '',
