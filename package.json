@@ -10,7 +10,9 @@
   "author": "Andrzej Kasak",
   "license": "ISC",
   "dependencies": {
+    "dateformat": "^3.0.3",
     "express": "^4.17.1",
+    "nedb": "^1.8.0",
     "socket.io": "^2.3.0"
   }
 }
