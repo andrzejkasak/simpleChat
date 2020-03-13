@@ -1,9 +1,10 @@
 
+
 let boxText, inpNick, inpText;
 let audio;
 
 window.onload = function() {
-  socket = io.connect();
+  socket = io.connect('localhost:3000');
   socket.on('dataSave');
   socket.on('dataSend1', receiveData1);
   socket.on('dataSend2', receiveData2);
@@ -11,7 +12,7 @@ window.onload = function() {
 
   audio = new Audio('messenger.mp3');
   
-  document.getElementById("foot").innerHTML = 'Andrzej Kasak - Copyright © 2020-'+(new Date().getYear()+1900).toString();
+  document.getElementById("foot").innerHTML = 'Andrzej Kasak - Copyright © 2020-'+(new Date().getFullYear()).toString();
 
   inpNick = document.getElementById("nickInput");
   inpText = document.getElementById("textInput");
@@ -37,15 +38,13 @@ function receiveData1(d){
 }
 
 function receiveData2(d){
-	//console.log(d);
 	boxText.innerHTML = '';
 	if(d.length == 0) boxText.innerHTML = 'NO NEW MESSAGES!</br>'
 	
 	for(let i=0; i<d.length; i++){
-		let s = document.createElement('span');
-		s.innerHTML = d[i][0];
+		let s = document.createElement('div');
+		s.innerHTML = "<div id='box'><div id='nick'>"+d[i][0] +"</div> <div id='date'>"+ d[i][2] + "</div><div id='text'>"+d[i][1] +"</div></div>";
 		boxText.appendChild(s);
-		boxText.innerHTML += ': '+d[i][1] +'</br>';
 	}
 }
 
@@ -58,6 +57,8 @@ function receiveId(n){
 function keyListener(event) {
 	
 	if (event.key === "Enter") {
+		
+		
 		let check = false;
 		for(let i=0; i < inpNick.value.length; i++ ){
 			if(inpNick.value[i] == ' '){
@@ -66,32 +67,32 @@ function keyListener(event) {
 			}
 		}
 		let check2 = false;
-		for(let i = 0; i < inpText.value.length; i++ ){
-			if(inpText.value[i] != ' '){
+		for(let i = inpText.value.length-1; i >= 0; i--){
+			if(inpText.value[i] != ' ' && inpText.value[i] != '\n'){
 			    check2 = true;
 				break;
 			}
 		}
 		
-		//console.log(inpText.value);
-		
+		//console.log('->'+ inpText.value +'<-', new Date());
+		let err = document.getElementById('red');
+		err.innerHTML = "";
 	  if(inpNick.value == '' || check){
-		boxText.innerHTML = "<span id='red'>Enter correct nickname!</span></br>" + boxText.innerHTML;
-	  }else if(inpText.value != '' && check2){
-		  
+		err.innerHTML = "Enter correct nickname!";
+	  }else if(inpText.value != '\n' && check2){
 		  var user = getCookie("username");
 		  if (user != inpNick.value || user == ''){
 			user = inpNick.value;
 			setCookie("username", user, 365);
 		  }
 		  
+		  
 		  let d = [inpNick.value, inpText.value];
 		  socket.emit('dataSave', d);
 		  socket.emit('dataSend1');
 		  socket.emit('dataSend2');
-		  inpText.value = '';
 	  }
-	
+		inpText.value = '';
 	
 	}
 }
