@@ -32,7 +32,7 @@ function newConnection(socket){
 		database.find({}).sort({index:1}).exec(function(err, messages) {
 			if(messages.length > 0) i = messages[messages.length-1].index;
 			//console.log('to ->>', messages, i, messages.length);
-			let now = new Date().toLocaleString("en-US", {timeZone: "Europe/Warsaw"})
+			let now = new Date().toLocaleString("pl-PL", {timeZone: "Europe/Warsaw"})
 			let message = {
 				user: d[0],
 				text: d[1],
