@@ -32,19 +32,17 @@ function newConnection(socket){
 		database.find({}).sort({index:1}).exec(function(err, messages) {
 			if(messages.length > 0) i = messages[messages.length-1].index;
 			//console.log('to ->>', messages, i, messages.length);
-			
+			let now = new Date().toLocaleString("en-US", {timeZone: "Europe/Warsaw"})
 			let message = {
 				user: d[0],
 				text: d[1],
-				date: dateFormat(new Date(), "dd/mm/yyyy hh:MM:ss"),
+				date: dateFormat(now, "dd/mm/yyyy hh:MM:ss"),
 				index: 0
 			}
 			if(i != null) message.index = i+1;
 			database.insert(message);
 			console.log('saving message');
 		});
-	
-		
 	}
 
 	socket.on('dataSend1', sendData1);
