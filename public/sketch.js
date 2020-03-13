@@ -68,8 +68,16 @@ function keyListener(event) {
 				break;
 			}
 		}
-		
-		if(inpText.value != '\n' && check2){
+		let check = false;
+		for(let i=0; i < inpNick.value.length; i++ ){
+			if(inpNick.value[i] == ' '){
+				check = true;
+				break;
+			}
+		}
+	  if(inpNick.value == '' || check){
+		  ;
+	  }else if(inpText.value != '\n' && check2){
 		  var user = getCookie("username");
 		  if (user != inpNick.value || user == ''){
 			user = inpNick.value;
