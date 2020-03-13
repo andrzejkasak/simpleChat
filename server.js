@@ -35,6 +35,7 @@ function newConnection(socket){
 			if(messages.length > 0) i = messages[messages.length-1].index;
 			//console.log('to ->>', messages, i, messages.length);
 			let now = new Date();
+			now.setHours(now.getHours()+1);
 			let message = {
 				user: d[0],
 				text: d[1],
