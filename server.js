@@ -18,13 +18,28 @@ let config = {
     password: 'CkY69lll0d',
     database: 'q4JaF0dHZ1'
 }
-let connection = mysql.createConnection(config);
-connection.connect(function(err) {
-  if (err) {
-    return console.error('error: ' + err.message);
-  }
-  console.log('Connected to the MySQL server.');
-});
+
+let connection;
+function handleDisconnect() {
+    connection = mysql.createConnection(config);
+    connection.connect(function(err) {
+    	if (err) {
+    		return console.error('error: ' + err.message);
+    		setTimeout(handleDisconnect, 10000);
+    	}
+    	console.log('Connected to the MySQL server.');
+    });
+
+    connection.on('error', function onError(err) {
+        console.log('error: ', err);
+        if (err.code == 'PROTOCOL_CONNECTION_LOST') {   
+            handleDisconnect();                         
+        } else {                                       
+            throw err;                                  
+        }
+    });
+}
+handleDisconnect();
 
 let ids = [];
 let nb = 50;
