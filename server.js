@@ -1,9 +1,9 @@
 let express = require('express'); //załączanie express do serwera
-let Datastore = require('nedb'); //baza danych
+let mysql = require('mysql'); //baza danych
 let dateFormat = require('dateformat');
 
-let app = express(); //wywołanie fukcji tworzącej apliakcję
-let server = app.listen(process.env.PORT); //nasłuchiwanie na porcie
+let app = express(); //wywołanie fukcji tworzącej aplikację
+let server = app.listen(3000); //nasłuchiwanie na portie o nr 3000
 app.use(express.static('public')); //hostowanie plików w folderze "public"
 
 console.log("Server is running!");
@@ -12,15 +12,22 @@ let socket = require('socket.io'); //załączenie socket.io
 let io = socket(server);  //połączenie socketa z serverem
 io.sockets.on('connection', newConnection); //połączenie event
 
-let database = new Datastore('database.db');
-database.ensureIndex({ fieldName: 'index', unique: true });
-database.loadDatabase();
-
-serverStart();
+let config = {
+    host: 'remotemysql.com',
+    user: 'q4JaF0dHZ1',
+    password: 'CkY69lll0d',
+    database: 'q4JaF0dHZ1'
+}
+let connection = mysql.createConnection(config);
+connection.connect(function(err) {
+  if (err) {
+    return console.error('error: ' + err.message);
+  }
+  console.log('Connected to the MySQL server.');
+});
 
 let ids = [];
-let nb = 100;
-let ind = 0;
+let nb = 50;
 
 function newConnection(socket){
 	console.log('New connection:' + socket.id);
@@ -30,56 +37,36 @@ function newConnection(socket){
 
 	socket.on('dataSave', saveData);
 	function saveData(d) {
-		let i;
-		database.find({}).sort({index:1}).exec(function(err, messages) {
-			if(messages.length > 0) i = messages[messages.length-1].index;
-			let now = new Date();
-			now.setTime(now.getTime()+3600000);
-			let message = {
-				user: d[0],
-				text: d[1],
-				date: dateFormat(now, "dd/mm/yyyy HH:MM:ss"),
-				index: 0
+		let sql = 'insert into message (user, text) values ("' + d[0] + '","' + d[1] + '");';
+		connection.query(sql, (error, results, fields) => {
+			if (error) {
+				return console.error(error.message);
 			}
-			if(i != null) message.index = i+1;
-			database.insert(message);
-			console.log('saving message');
+			console.log('message saved');
 		});
-	
-		
 	}
 
 	socket.on('dataSend1', sendData1);
 	function sendData1() {
-		database.find({}).sort({index:1}).exec(function(err, messages) {
-			let data = [];
-			messages.forEach(function(message) {
-				let mess = {
-					user: message.user,
-					text: message.text,
-					date: message.date
-				}
-				data.unshift(mess);
-			});
-			socket.broadcast.emit('dataSend1', data.slice(0, nb));
-			console.log('sending messages1');
+		let sql = 'select * from message order by date desc limit ' + nb + ';';
+		connection.query(sql, (error, results, fields) => {
+			if (error) {
+				return console.error(error.message);
+			}
+			console.log('message sent | ', results);
+			socket.broadcast.emit('dataSend1', results);
 		});
 	}
 	
 	socket.on('dataSend2', sendData2);
 	function sendData2() {
-		database.find({}).sort({index:1}).exec(function(err, messages) {
-			let data = [];
-			messages.forEach(function(message) {
-				let mess = {
-					user: message.user,
-					text: message.text,
-					date: message.date
-				}
-				data.unshift(mess);
-			});
-			socket.emit('dataSend2', data.slice(0, nb));
-			console.log('sending messages2');
+		let sql = 'select * from message order by date desc limit ' + nb + ';';
+		connection.query(sql, (error, results, fields) => {
+			if (error) {
+				return console.error(error.message);
+			}
+			console.log('message sent');
+			socket.emit('dataSend2', results);
 		});
 	}
 	
@@ -96,21 +83,3 @@ function newConnection(socket){
 		io.sockets.emit('id', ids.length);
 	}
 }
-
-function serverStart(){
-	let i;
-		database.find({}).sort({index:1}).exec(function(err, messages) {
-			if(messages.length > 0) i = messages[messages.length-1].index;
-			let now = new Date();
-			now.setTime(now.getTime()+3600000);
-			let message = {
-				user: 'server started:',
-				text: '',
-				date: dateFormat(now, "dd/mm/yyyy HH:MM:ss"),
-				index: 0
-			}
-			if(i != null) message.index = i+1;
-			database.insert(message);
-		});
-}
-
