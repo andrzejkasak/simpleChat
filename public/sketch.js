@@ -49,7 +49,7 @@ function receiveData2(d){
 		};  
 		let s = document.createElement('div');
 		s.innerHTML = "<div id='box'><div id='userbar'><span id='nick'>"+d[i].user+
-		"</span>"+ convDate.toLocaleTimeString("pl-PL", options) +
+		"</span>"+ convDate.toLocaleTimeString("en-US", options) +
 		"</div><div id='text'>"+d[i].text+"</div></div>";
 		boxText.appendChild(s);
 	}
