@@ -45,7 +45,7 @@ function receiveData2(d){
 		let convDate = new Date(d[i].date);
 		let options = {  
     			weekday: "long", year: "numeric", month: "numeric",  
-    			day: "numeric", hour: "2-digit", minute: "2-digit"  
+    			day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" 
 		};  
 		let s = document.createElement('div');
 		s.innerHTML = "<div id='box'><div id='userbar'><span id='nick'>"+d[i].user+
