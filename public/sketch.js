@@ -2,7 +2,7 @@ let boxText, inpNick, inpText;
 let audio;
 
 window.onload = function() {
-  socket = io.connect('localhost:3000');
+  socket = io.connect();
   socket.on('dataSave');
   socket.on('dataSend1', receiveData1);
   socket.on('dataSend2', receiveData2);
