@@ -43,7 +43,6 @@ function receiveData2(d){
 	
 	for(let i=0; i<d.length; i++){
 		let convDate = new Date(d[i].date);
-		convDate.setTime(convDate.getTime() + (2*60*60*1000));
 		let s = document.createElement('div');
 		s.innerHTML = "<div id='box'><div id='userbar'><span id='nick'>"+d[i].user+
 		"</span>"+ convDate +
