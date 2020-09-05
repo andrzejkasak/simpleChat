@@ -3,7 +3,7 @@ let mysql = require('mysql'); //baza danych
 let dateFormat = require('dateformat');
 
 let app = express(); //wywołanie fukcji tworzącej aplikację
-let server = app.listen(3000); //nasłuchiwanie na portie o nr 3000
+let server = app.listen(process.env.PORT); //nasłuchiwanie na portie o nr 3000
 app.use(express.static('public')); //hostowanie plików w folderze "public"
 
 console.log("Server is running!");
