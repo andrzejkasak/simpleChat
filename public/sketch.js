@@ -45,7 +45,7 @@ function receiveData2(d){
 		let convDate = new Date(d[i].date);
 		let s = document.createElement('div');
 		s.innerHTML = "<div id='box'><div id='userbar'><span id='nick'>"+d[i].user+
-		"</span>"+ convDate +
+		"</span>"+ convDate.toLocaleString(); +
 		"</div><div id='text'>"+d[i].text+"</div></div>";
 		boxText.appendChild(s);
 	}
