@@ -1,10 +1,8 @@
-
-
 let boxText, inpNick, inpText;
 let audio;
 
 window.onload = function() {
-  socket = io.connect();
+  socket = io.connect('localhost:3000');
   socket.on('dataSave');
   socket.on('dataSend1', receiveData1);
   socket.on('dataSend2', receiveData2);
@@ -41,11 +39,14 @@ function receiveData1(d){
 function receiveData2(d){
 	boxText.innerHTML = '';
 	if(d.length == 0) boxText.innerHTML = 'NO NEW MESSAGES!</br>'
+	//console.log(d[0].date)
 	
 	for(let i=0; i<d.length; i++){
+		let convDate = new Date(d[i].date);
+		convDate.setTime(convDate.getTime() + (2*60*60*1000));
 		let s = document.createElement('div');
 		s.innerHTML = "<div id='box'><div id='userbar'><span id='nick'>"+d[i].user+
-		"</span>"+d[i].date.toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'})+
+		"</span>"+ convDate +
 		"</div><div id='text'>"+d[i].text+"</div></div>";
 		boxText.appendChild(s);
 	}
