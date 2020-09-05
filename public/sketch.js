@@ -43,9 +43,13 @@ function receiveData2(d){
 	
 	for(let i=0; i<d.length; i++){
 		let convDate = new Date(d[i].date);
+		let options = {  
+    			weekday: "long", year: "numeric", month: "numeric",  
+    			day: "numeric", hour: "2-digit", minute: "2-digit"  
+		};  
 		let s = document.createElement('div');
 		s.innerHTML = "<div id='box'><div id='userbar'><span id='nick'>"+d[i].user+
-		"</span>"+ convDate.toLocaleString(); +
+		"</span>"+ convDate.toLocaleTimeString("pl-PL", options) +
 		"</div><div id='text'>"+d[i].text+"</div></div>";
 		boxText.appendChild(s);
 	}
