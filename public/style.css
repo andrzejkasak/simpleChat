@@ -54,6 +54,7 @@ html, body {
 	background-color:#777;
 	color: #FFF;
 	font-weight: normal;
+	overflow-wrap: break-word;
 }
 
 #box{
